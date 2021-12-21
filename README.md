@@ -12,21 +12,21 @@
 
 我们使用librosa库读取数据，采用率设为16000，读取后画出波形图
 
-![image-20211124145611579](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124145611579.png)
+![image-20211124145611579](figure\image-20211124145611579.png)
 
 读取后的信号数组为一维数组，长度根据音频长度改变。
 
-![image-20211124145750777](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124145750777.png)
+![image-20211124145750777](figure\image-20211124145750777.png)
 
 ### 音频时长
 
 我们想要查看各音频的时长分布，使用librosa.get_duration函数。
 
-![image-20211124145850033](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124145850033.png)
+![image-20211124145850033](figure\image-20211124145850033.png)
 
 画出音频时长的直方图。
 
-<img src="C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124145919508.png" alt="image-20211124145919508" style="zoom:50%;" />
+<img src="figure\image-20211124145919508.png" alt="image-20211124145919508" style="zoom:50%;" />
 
 可以看到，大部分音频在2-4s，最长的音频在11s左右。
 
@@ -34,11 +34,11 @@
 
 根据资料，男生和女生的基频有着显著不同，可以作为一个特征。男声的基音频率大都在100-200HZ之间，而女声则在200-350HZ之间，因此，我们尝试使用pysptk.sptk.swipe函数计算出各个音频的基频。
 
-![image-20211124150235030](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124150235030.png)
+![image-20211124150235030](figure\image-20211124150235030.png)
 
 我们查看男生平均基频和女生平均基频的均值
 
-<img src="C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124150330318.png" alt="image-20211124150330318" style="zoom:100%;" />
+<img src="figure\image-20211124150330318.png" alt="image-20211124150330318" style="zoom:100%;" />
 
 可以看到两者的差异较大，说明平均基频是一个区分度较大的特征。
 
@@ -46,11 +46,11 @@
 
 女生基频为：
 
-![image-20211124150505834](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124150505834.png)
+![image-20211124150505834](figure\image-20211124150505834.png)
 
 男生基频为：
 
-![image-20211124150529456](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124150529456.png)
+![image-20211124150529456](figure\image-20211124150529456.png)
 
 ### 梅尔频谱
 
@@ -67,9 +67,9 @@
 
 我们可以用librosa.feature.melspectrogram得到梅尔频谱，我们分别计算出男生的梅尔频谱和女生的梅尔频谱。
 
-![image-20211124152231692](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124152231692.png)
+![image-20211124152231692](figure\image-20211124152231692.png)
 
-![image-20211124152244950](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124152244950.png)
+![image-20211124152244950](figure\image-20211124152244950.png)
 
 可以看到，男生的频谱在低频域的分贝较大，女生的频谱在高频域的分贝较大，因此梅尔频谱是一个区分度较大的特征。
 
@@ -87,9 +87,9 @@
 
 同样的，我们计算出男生和女生的梅尔倒谱系数，并且画出系数的直方图。
 
-![image-20211124154032622](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124154032622.png)
+![image-20211124154032622](figure\image-20211124154032622.png)
 
-![image-20211124154057555](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124154057555.png)
+![image-20211124154057555](figure\image-20211124154057555.png)
 
 可以看到，男生和女生的梅尔倒谱系数分布存在一定的差异，可以作为音频特征。
 
@@ -101,7 +101,7 @@
 
 我们用pytorch的Dataset类定义数据集，每次从数据集中获取一项，我们都会调用librosa.feature.mfcc函数获取音频的MFCC以及平均基频作为特征。其中，平均基频已经在数据探索环节中计算出来并存储在excel文件中。代码详见dataset.py。
 
-![image-20211124155458609](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124155458609.png)
+![image-20211124155458609](figure\image-20211124155458609.png)
 
 ## 模型架构
 
@@ -116,7 +116,7 @@
 
 代码详见model.py。
 
-![image-20211124191546265](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124191546265.png)
+![image-20211124191546265](figure\image-20211124191546265.png)
 
 ## 训练过程
 
@@ -124,19 +124,19 @@
 
 首先，我们将数据集根据9:1的比例分为训练集和测试集（1800个样例作为训练集，200个样例作为测试集），切分过程采用random函数随机分组。
 
-![image-20211124191838045](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124191838045.png)
+![image-20211124191838045](figure\image-20211124191838045.png)
 
 为了加快训练速度，采用cuda平台进行训练。
 
-![image-20211124192051097](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124192051097.png)
+![image-20211124192051097](figure\image-20211124192051097.png)
 
 损失函数采用交叉熵损失函数，优化器采用Adam优化器。
 
-![image-20211124192031009](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124192031009.png)
+![image-20211124192031009](figure\image-20211124192031009.png)
 
 我们设置50个epoch进行训练，每次训练完1个epoch我们都会计算训练集的损失函数、正确率，并且会在测试集上测试一遍模型，计算测试集的准确率，精确率，召回率和F1得分。每当测试集的准确率有所上升，我们会保存一次模型，留到后续以填充真正的无标签测试集。
 
-![image-20211124192416664](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124192416664.png)
+![image-20211124192416664](figure\image-20211124192416664.png)
 
 训练的具体参数详见config.py。
 
@@ -170,7 +170,7 @@ $$
 
 经过上述训练过程，我们获得了最终的模型。我们对最终模型在测试集上进行了上述4个评价指标的评估。
 
-![image-20211124193454009](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124193454009.png)
+![image-20211124193454009](figure\image-20211124193454009.png)
 
 模型的准确率为97%，精确率为98.63%，召回率为97.3%，F1得分为97.96%。从混淆矩阵可以看到在200个样例中仅有6个样例分类错误。
 
@@ -178,7 +178,7 @@ $$
 
 最后，我们用训练好的模型对测试集进行标签的填充，填充结果详见test.xlsx。
 
-![image-20211124193818379](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124193818379.png)
+![image-20211124193818379](figure\image-20211124193818379.png)
 
-![image-20211124193850450](C:\Users\LinHengxu\AppData\Roaming\Typora\typora-user-images\image-20211124193850450.png)
+![image-20211124193850450](figure\image-20211124193850450.png)
 
